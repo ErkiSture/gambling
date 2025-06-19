@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>LOGIN NOW OR ELSE</h1>
+
+<form method="POST">
+    <input name="username" placeholder="Username"><br>
+    <input name="password" type="password" placeholder="Password"><br>
+    <label><input type="checkbox" name="remember"> Remember Me</label><br>
+    <input type="submit" value="Log In">
+</form>
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+                {% for category, message in messages %}
+                   <span class="error">{{category}}: {{message}}</span>
+                {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<a href="{{ url_for('register') }}"> Click here to register </a>
+
+
+{% endblock %}
