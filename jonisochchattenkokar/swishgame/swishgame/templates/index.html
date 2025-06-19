@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Swish Game</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Swish-spelare</h1>
+
+    <form id="rollForm">
+        <input type="text" id="spelare" placeholder="Spelare user_id" required><br>
+        <input type="text" id="mottagare" placeholder="Mottagare user_id" required><br>
+        <input type="number" id="pengar" placeholder="Pengar i spel (kr)" required><br>
+        <input type="number" id="avvikelse" placeholder="Standardavvikelse (kr)" required><br>
+        <input type="number" id="dricks" placeholder="Dricks (kr)" required><br>
+        <input type="text" id="grupp_id" placeholder="Grupp ID" required><br>
+        <button type="submit">Rulla!</button>
+    </form>
+
+    <div id="resultat"></div>
+
+    <script>
+        document.getElementById('rollForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                spelare: document.getElementById('spelare').value,
+                mottagare: document.getElementById('mottagare').value,
+                pengar: document.getElementById('pengar').value,
+                avvikelse: document.getElementById('avvikelse').value,
+                dricks: document.getElementById('dricks').value,
+                grupp_id: document.getElementById('grupp_id').value
+            };
+
+            const res = await fetch('/roll', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+
+            const json = await res.json();
+            document.getElementById('resultat').innerHTML = `
+                <h2>Resultat</h2>
+                <p>Du swishar: <strong>${json.slumptal} kr</strong></p>
+                <p>(Möjligt intervall: ${json.min} – ${json.max} kr)</p>
+                <p>Game ID: ${json.game_id}</p>
+                <p>Roll #: ${json.roll}</p>
+            `;
+        });
+    </script>
+</body>
+</html>
