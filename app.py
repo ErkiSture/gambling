@@ -1,10 +1,23 @@
 from flask import Flask, request, g, render_template, redirect, url_for, session, flash, get_flashed_messages
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+from authlib.integrations.flask_client import OAuth
 
 app = Flask(__name__)
 app.secret_key = 'ds2slayer69420'
 DATABASE = 'mydb.db'
+
+
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id='1001266071376-qtf88a8m7cr92ap638dq3tvc4k16euap.apps.googleusercontent.com',
+    client_secret='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',
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    client_kwargs={'scope': 'openid email profile'},
+)
+
 
 def get_db():
     if 'db' not in g:
@@ -18,6 +31,7 @@ def close_db(exception):
     if db is not None:
         db.close()
 
+
 def init_db():
     db = sqlite3.connect(DATABASE)
     db.execute("""CREATE TABLE IF NOT EXISTS users( 
@@ -30,16 +44,34 @@ def init_db():
 
 
 
+@app.route('/login/google')
+def login_google():
+    redirect_uri = url_for('auth_callback', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/auth/callback')
+def auth_callback():
+    token = google.authorize_access_token()
+    user_info = google.get('userinfo').json()
+    # Use user_info['email'] etc. to log user in
+    session['username'] = user_info['email']
+    db = get_db()
+    user = db.execute('SELECT * FROM users WHERE name = ?', (user_info['email'],)).fetchone()
+    if user is None:
+        db.execute('INSERT INTO users (name, password) VALUES (?, ?)', (user_info['email'], ''))
+        db.commit()
+    return redirect(url_for('index'))
+
+
+
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     db = get_db()
     username = session.get('username')
     rows = db.execute('select * from users').fetchall()
-    for row in rows:
-        print(row['name'])
     return render_template('index.html', users=rows, username=username)
-
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -107,6 +139,9 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+
 if __name__ == '__main__':
     init_db()
-    app.run(debug=False)
+    app.run(debug=True)
+
+
