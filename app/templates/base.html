@@ -9,9 +9,15 @@
 <body>
     <header>
         <nav>
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('routes.index') }}">Home</a>
+            {% if not session.get('logged_in') %}
+            <a href="{{ url_for('auth.login') }}">Login</a>
+            {% endif %}
+            {% if session.get('logged_in') %}
+            <a href="{{ url_for('routes.friends') }}">friends</a>
+            {% endif %}
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+
         </nav>
     </header>
 

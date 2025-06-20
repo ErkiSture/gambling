@@ -1,14 +1,13 @@
 *{
     padding: 0;
     margin: 0;
+
 }
 
 body{
     margin: 20px;
-    background-color: antiquewhite;
-    /* border: 2px dotted red  ; */
+    background-color: #636363;
 }
-
 
 .error{
     color: red;

@@ -41,9 +41,15 @@ def login():
         elif check_password_hash(user['password'], password):
             session['user_id'] = user['id']
             session['username'] = user['name']
+            session['logged_in'] = True
             session.permanent = remember_me
             return redirect(url_for('routes.index'))
         else:
             flash('Invalid password. Please try again', 'error')
 
     return render_template('login.html')
+
+@bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('auth.login'))

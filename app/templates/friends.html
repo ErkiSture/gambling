@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br>
+
+<h3>Add friend</h3>
+<form method="post" action=" {{ url_for('routes.add_friend') }}">
+    <input type="text" name="friend_name">
+    <button type="submit">Add Friend</button>
+</form>
+
+<br>
+
+<h3>Your Friends</h3>
+<table border="1">
+  <tr>
+    <th>User ID</th>
+    <th>Friend ID</th>
+  </tr>
+  {% for row in friends %}
+  <tr>
+    <td>{{ row['user_id'] }}</td>
+    <td>{{ row['friend_id'] }}</td>
+    <td>{{ row['status'] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<br><br>
+
+<h3>Full Friends Table</h3>
+<table border="1">
+  <tr>
+    <th>User ID</th>
+    <th>Friend ID</th>
+  </tr>
+  {% for row in friends_table %}
+  <tr>
+    <td>{{ row['user_id'] }}</td>
+    <td>{{ row['friend_id'] }}</td>
+    <td>{{ row['status'] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<br>
+
+<h3>Friend requests</h3>
+
+{% endblock %}

@@ -1,7 +1,4 @@
-
-
-
-from flask import g
+from flask import g, current_app
 import sqlite3
 
 def get_db():
@@ -10,12 +7,10 @@ def get_db():
         g.db.row_factory = sqlite3.Row
     return g.db
 
-
 def close_db(exception):
     db = g.pop('db', None)
     if db is not None:
         db.close()
-
 
 def init_db(app):
     with app.app_context():
@@ -24,6 +19,17 @@ def init_db(app):
             id INTEGER PRIMARY KEY, 
             name TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL
+        )""")
+        db.execute("""CREATE TABLE IF NOT EXISTS friends( 
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            user_id INTEGER NOT NULL,
+            friend_id NOT NULL,
+            status TEXT NOT NULL CHECK(status IN ('pending', 'accepted')),
+            
+            UNIQUE(user_id, friend_id)
+            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(friend_id) REFERENCES users(id)
+
         )""")
         db.commit()
         db.close()
