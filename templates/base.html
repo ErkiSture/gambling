@@ -12,11 +12,12 @@
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('login') }}">Login</a>
             <a href="{{ url_for('logout') }}">Logout</a>
-            <a href="{{ url_for('login_google') }}">Login with Google</a>
         </nav>
     </header>
 
     {% block content %} {% endblock %}
+
 </form>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
