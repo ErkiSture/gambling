@@ -1,6 +1,8 @@
 import sqlite3
 db = sqlite3.connect('mydb.db')
-def add_friend(user_id, friend_id):
+db.row_factory = sqlite3.Row
+""" def add_friend(user_id, friend_id):
+    sender_id = user_id
     if user_id == friend_id:
         return
     if user_id > friend_id:
@@ -8,15 +10,15 @@ def add_friend(user_id, friend_id):
     
     try:
         db.execute(
-            'INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, ?)',
-            (user_id, friend_id, 'pending')
+            'INSERT INTO friends (user_id, friend_id, sender_id, status) VALUES (?, ?, ?, ?)',
+            (user_id, friend_id, sender_id, 'pending')
         )
         db.commit()
     except sqlite3.IntegrityError:
         # Handle duplicate or error
         pass
     
-add_friend(7, 8)
+add_friend(9, 7)
 
 rows = db.execute('SELECT * FROM friends').fetchall()
 for row in rows:
@@ -29,7 +31,7 @@ for row in rows:
 #db.execute('DELETE FROM friends')
 #db.commit()
 
-db.close()
+db.close() """
 
 
 """"
@@ -43,3 +45,8 @@ UNIQUE(user_id, friend_id)
 FOREIGN KEY(user_id) REFERENCES users(id)
 FOREIGN KEY(friend_id) REFERENCES users(id)
 """
+
+db.row_factory = None
+rows = db.execute('SELECT * FROM friends').fetchall()
+for row in rows:
+    print(row)

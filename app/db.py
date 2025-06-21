@@ -24,6 +24,7 @@ def init_db(app):
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
             user_id INTEGER NOT NULL,
             friend_id NOT NULL,
+            sender_id NOT NULL,
             status TEXT NOT NULL CHECK(status IN ('pending', 'accepted')),
             
             UNIQUE(user_id, friend_id)

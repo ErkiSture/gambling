@@ -13,19 +13,13 @@
 <br>
 
 <h3>Your Friends</h3>
-<table border="1">
-  <tr>
-    <th>User ID</th>
-    <th>Friend ID</th>
-  </tr>
-  {% for row in friends %}
-  <tr>
-    <td>{{ row['user_id'] }}</td>
-    <td>{{ row['friend_id'] }}</td>
-    <td>{{ row['status'] }}</td>
-  </tr>
-  {% endfor %}
-</table>
+{% for friend in friends_list %}
+<div>{{ friend['name'] }}</div>
+<form method="POST" action=" {{ url_for('routes.remove_friend') }} ">
+    <input type="hidden" name="friend_id" value="{{friend['id']}}">
+    <button type="Submit">Remove</button>
+</form>
+{% endfor%}
 
 <br><br>
 
@@ -34,11 +28,14 @@
   <tr>
     <th>User ID</th>
     <th>Friend ID</th>
+    <th>Sender ID</th>
+    <th>Status</th>
   </tr>
   {% for row in friends_table %}
   <tr>
     <td>{{ row['user_id'] }}</td>
     <td>{{ row['friend_id'] }}</td>
+    <td>{{ row['sender_id'] }}</td>
     <td>{{ row['status'] }}</td>
   </tr>
   {% endfor %}
@@ -46,6 +43,40 @@
 
 <br>
 
-<h3>Friend requests</h3>
+<h3>Friend Requests</h3>
+<table border="1">
+  <tr>
+    <th>User ID</th>
+    <th>Friend ID</th>
+    <th>Sender ID</th>
+    <th>Status</th>
+  </tr>
+  {% set friend_requests = incoming_friend_requests | list %}
+  {% for req in friend_requests %}
+  <tr>
+    <td>{{ req['user_id'] }}</td>
+    <td>{{ req['friend_id'] }}</td>
+    <td>{{ req['sender_id'] }}</td>
+    <td>{{ req['status'] }}</td>
+  </tr>
+  
+  {% endfor %}
+</table>
+
+<br>
+
+{% for req in friend_requests %}
+<div>
+    <h3> {{ req['sender_name'] }} sent you a friend request!</h3>
+    <form method="POST" action="{{ url_for('routes.respond_friend')}}">
+        <input type="hidden" name="request_id" value="{{ req['id'] }}"> 
+
+        <button type="submit" name="action" value="accept">Accept</button>
+        <button type="submit" name="action" value="reject">Reject</button>
+
+    </form>
+</div>
+{% endfor %}
+
 
 {% endblock %}
