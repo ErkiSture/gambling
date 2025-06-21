@@ -30,7 +30,16 @@ def init_db(app):
             UNIQUE(user_id, friend_id)
             FOREIGN KEY(user_id) REFERENCES users(id)
             FOREIGN KEY(friend_id) REFERENCES users(id)
+        )""")
+        db.execute("""CREATE TABLE IF NOT EXISTS gambles( 
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            total_money INTEGER NOT NULL,
+            tip INTEGER NOT NULL,
+            deviation REAL NOT NULL,
+            group_id INTEGER,
+            date TEXT DEFAULT (DATE('now'))
 
+ 
         )""")
         db.commit()
         db.close()

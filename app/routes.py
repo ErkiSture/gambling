@@ -62,7 +62,7 @@ def friends():
 
 
 def add_friendship_to_db(user_id, friend_id):
-    print(user_id, friend_id, 'AAAAAAAAAA')
+    #print(user_id, friend_id, 'AAAAAAAAAA')
     sender_id = user_id
     if user_id > friend_id:
         user_id, friend_id = friend_id, user_id
