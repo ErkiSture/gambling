@@ -46,6 +46,22 @@ FOREIGN KEY(user_id) REFERENCES users(id)
 FOREIGN KEY(friend_id) REFERENCES users(id)
 """
 
+db.execute(
+    """"
+    CREATE TABLE IF NOT EXISTS gambles( 
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    roll INTEGER
+    total_money
+    tip
+    deviation
+    group_id
+    players_id
+    receiver_id
+    date
+    """
+)
+
+
 db.row_factory = None
 rows = db.execute('SELECT * FROM friends').fetchall()
 for row in rows:
