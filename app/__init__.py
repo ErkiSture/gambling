@@ -2,6 +2,8 @@ from flask import Flask
 from .db import init_db, close_db
 from .routes import bp as routes_bp
 from .auth import bp as auth_bp
+from .friends import bp as friends_bp
+from .stats import bp as stats_bp
 
 def create_app():
     app = Flask(__name__)
@@ -13,5 +15,7 @@ def create_app():
 
     app.register_blueprint(routes_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(friends_bp)
+    app.register_blueprint(stats_bp)
 
     return app

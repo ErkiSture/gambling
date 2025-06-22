@@ -14,7 +14,8 @@
             <a href="{{ url_for('auth.login') }}">Login</a>
             {% endif %}
             {% if session.get('logged_in') %}
-            <a href="{{ url_for('routes.friends') }}">friends</a>
+            <a href="{{ url_for('friends.friends') }}">friends</a>
+            <a href="{{ url_for('stats.stats') }}">Stats</a>
             {% endif %}
             <a href="{{ url_for('auth.logout') }}">Logout</a>
 

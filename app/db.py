@@ -31,15 +31,32 @@ def init_db(app):
             FOREIGN KEY(user_id) REFERENCES users(id)
             FOREIGN KEY(friend_id) REFERENCES users(id)
         )""")
-        db.execute("""CREATE TABLE IF NOT EXISTS gambles( 
-            id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            total_money INTEGER NOT NULL,
-            tip INTEGER NOT NULL,
-            deviation REAL NOT NULL,
-            group_id INTEGER,
-            date TEXT DEFAULT (DATE('now'))
+        db.execute(
+        """CREATE TABLE IF NOT EXISTS gambles( 
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        total_money INTEGER NOT NULL,
+        tip INTEGER NOT NULL,
+        deviation INTEGER NOT NULL,
+        group_id INTEGER,
+        receiver_id INTEGER NOT NULL,
+        date TEXT DEFAULT (DATE('now')),
 
- 
-        )""")
+        FOREIGN KEY(receiver_id) REFERENCES users(id)
+        )"""
+        )
+        db.execute(
+        """
+        CREATE TABLE IF NOT EXISTS rolls(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        gamble_id INTEGER NOT NULL,
+        roll INTEGER NOT NULL,
+        random_val INTEGER NOT NULL,
+        player INTEGER NOT NULL,
+
+        FOREIGN KEY(gamble_id) REFERENCES gambles(id),
+        FOREIGN KEY(player) REFERENCES users(id)
+        )
+        """
+        )
         db.commit()
         db.close()

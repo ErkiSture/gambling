@@ -1,38 +1,6 @@
 import sqlite3
 db = sqlite3.connect('mydb.db')
 db.row_factory = sqlite3.Row
-""" def add_friend(user_id, friend_id):
-    sender_id = user_id
-    if user_id == friend_id:
-        return
-    if user_id > friend_id:
-        user_id, friend_id = friend_id, user_id
-    
-    try:
-        db.execute(
-            'INSERT INTO friends (user_id, friend_id, sender_id, status) VALUES (?, ?, ?, ?)',
-            (user_id, friend_id, sender_id, 'pending')
-        )
-        db.commit()
-    except sqlite3.IntegrityError:
-        # Handle duplicate or error
-        pass
-    
-add_friend(9, 7)
-
-rows = db.execute('SELECT * FROM friends').fetchall()
-for row in rows:
-    print(row)
-print('-------------')
-rows = db.execute('SELECT * FROM friends WHERE friend_id = ? or user_id = ?' , (3, 3,)).fetchall()
-for row in rows:
-    print(row)
-
-#db.execute('DELETE FROM friends')
-#db.commit()
-
-db.close() """
-
 
 """"
 CREATE TABLE IF NOT EXISTS friends( 
@@ -46,23 +14,43 @@ FOREIGN KEY(user_id) REFERENCES users(id)
 FOREIGN KEY(friend_id) REFERENCES users(id)
 """
 
-db.execute(
-    """"
-    CREATE TABLE IF NOT EXISTS gambles( 
-    id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    roll INTEGER
-    total_money
-    tip
-    deviation
-    group_id
-    players_id
-    receiver_id
-    date
+db.executemany("""
+    INSERT INTO gambles (total_money, tip, deviation, group_id, receiver_id)
+    VALUES (?, ?, ?, ?, ?)
+""", [
+    (400, 0, 3.5, 1, 3),
+    (500, 10, 2.1, 2, 2),
+    (300, 5, 4.2, 4, 1),
+])
+db.commit()
+
+
+
+db.executemany(
     """
+    INSERT INTO rolls (gamble_id, roll, random_val, player)
+    VALUES (?, ?, ?, ?)
+    """,
+    [
+        (1, 1, -6, 3),
+        (1, 2, 4, 2),
+        (1, 3, 2, 6),
+        (2, 1, -14, 1),
+        (2, 2, 10, 2),
+        (2, 3, 0, 3)
+    ]
 )
+#db.execute('DELETE FROM gambles')
+#db.execute('DELETE FROM rolls')
+db.commit()
 
 
 db.row_factory = None
-rows = db.execute('SELECT * FROM friends').fetchall()
+rows = db.execute('SELECT * FROM gambles').fetchall()
+for row in rows:
+    print(row)
+
+
+rows = db.execute('SELECT * FROM rolls').fetchall()
 for row in rows:
     print(row)
